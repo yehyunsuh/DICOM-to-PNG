@@ -1,5 +1,4 @@
-# Dealing with DICOM files
-
+# Converting Dicom to PNG
 ## Prerequisites
 ### Python3
 - If you already have downloaded python3 before, you do not have to download it again   
@@ -8,42 +7,20 @@
 ### Download libraries
 - Type the following in your `terminal`
 ```shell
-pip3 install pydicom numpy pillow tqdm opencv-python argparse
+pip3 install pydicom numpy pillow tqdm argparse
 ```
-
-# Convert Dicom to PNG
-## 1. When you have all the dicom files in one folder
-### 1.1 How to set up your folders
+## 1. How to set up your folders
 ```
 Dicom
 ├─ dicom_files
 |   └─ here goes the dicom files
-└─ dicom_to_png1.py
+└─ dicom_to_png.py
 ```
-### 1.2 Run python file
+## 2. Run python file
 - Type the following in your `terminal`
 ```python3
 cd <<path to Dicom folder>>
-python3 dicom_to_png1.py
-```
-
-## 2. When you have dicom files in raw format
-### 2.1 How to set up your folders
-```
-Dicom
-├─ dicom_files
-|   └─ Directory 1
-|       └─ Directory 2
-|           └─ Directory 3
-|               └─ Directory 4
-|                   └─ here goes the dicom files
-└─ dicom_to_png2.py
-```
-### 2.2 Run python file
-- Type the following in your `terminal`
-```python3
-cd <<path to Dicom folder>>
-python3 dicom_to_png2.py
+python3 dicom_to_png.py
 ```
 
 ## 3. How it should look like after creating PNG files
@@ -55,42 +32,16 @@ Dicom
 └─ dicom_to_png.py
 ```
 
-# Annotating the Markers (Labeling the Image)
-## 1. When you have PNG files in `png` folder
-### 1.1 How the folder should look like
+## 4. PNG file name
+Your PNG file name will be
 ```
-Dicom
-├─ dicom_files
-├─ png
-├─ dicom_to_png.py
-└─ marker_annotator.py
+<<path to dicom file>>_<<name of dicom file>>.png
 ```
-### 1.2 Run python file
-- Type the following in your `terminal`
-```python3
-cd <<path to Dicom folder>>
-python3 marker_annotator.py
+For example, 
 ```
-
-## 2. When you have PNG files in other folder
-### 2.1 How the folder should look like
+dicom_files/AAAAA/BBBBB/CCCCC/DDDDD/EEEEE/dicom.dcm
 ```
-Dicom
-├─ dicom_files
-├─ <<name of the png folder>>
-├─ dicom_to_png.py
-└─ marker_annotator.py
+if your dicom file was in path, your name of your dicom file will be
 ```
-### 2.2 Run python file
-- Type the following in your `terminal`
-```python3
-cd <<path to Dicom folder>>
-python3 marker_annotator.py --path <<name of the png folder>>
+AAAAA_BBBBB_CCCCC_DDDDD_EEEEE_dicom.png
 ```
-
-## 3. How to annotate the markers
-- `left click`: every time you do a click, there will be a red dot generated in the image and coordinates of the red dot will be extracted
-- `b`: when you annotate the wrong point, press `b` and the dot will be erased
-- `n`: when you are done with one image, press `n` and you can move on to the next image
-- `q`: when you are done with annotating, press `q` and program will be terminated
-- After executing the file, you will have a txt file that has `current date + current time + folder name.txt`
