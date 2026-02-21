@@ -8,6 +8,16 @@ from glob import glob
 from tqdm import tqdm
 
 
+def is_dicom_file(path):
+    """Return True if the file has the DICOM signature (preamble + 'DICM' at offset 128)."""
+    try:
+        with open(path, 'rb') as f:
+            f.seek(128)
+            return f.read(4) == b'DICM'
+    except (OSError, IOError):
+        return False
+
+
 def main(args):
     path_list, dicom_path_list = [], []
     path_list.append(args.dicom_folder)
@@ -15,7 +25,7 @@ def main(args):
     # Create png folder
     os.makedirs(args.png_folder, exist_ok=True)
 
-    # Search for path to all dicom files
+    # Search for path to all dicom files (only include files with DICOM signature)
     while path_list != []:
         current_path = path_list.pop()
         tmp_path_list = glob(f'{current_path}/*')
@@ -24,7 +34,8 @@ def main(args):
             for tmp_path in tmp_path_list:
                 path_list.append(tmp_path)
         else:
-            dicom_path_list.append(current_path)
+            if is_dicom_file(current_path):
+                dicom_path_list.append(current_path)
 
     # From the paths found, convert them in to png format
     for dicom_name in tqdm(dicom_path_list):
@@ -37,7 +48,11 @@ def main(args):
             for i in range(2, len(split)):
                 if split[i] == args.dicom_folder:
                     break
+                if split[i].upper() == 'DICOM':
+                    continue
                 file_name += f'_{split[i]}'
+
+            file_name = file_name.lower()
 
             norm = (dcm_img-np.min(dcm_img))/(np.max(dcm_img)-np.min(dcm_img))
             norm_img = np.uint8(norm*255)
